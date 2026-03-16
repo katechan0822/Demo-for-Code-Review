@@ -1,0 +1,26 @@
+name: Snyk Security Scan
+on: [push]
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+
+      - name: Install Snyk
+        run: npm install -g snyk
+
+      - name: Auth to Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+      - name: Snyk Open Source (SCA)
+        run: snyk test
+
+      - name: Snyk IaC
+        run: snyk iac test
+
+      - name: Snyk Code (SAST)
+        run: snyk code test
